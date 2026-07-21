@@ -453,16 +453,10 @@ function networkDown() {
   COMPOSE_CA_FILES="-f compose/${COMPOSE_FILE_CA}"
   COMPOSE_FILES="${COMPOSE_BASE_FILES} ${COMPOSE_COUCH_FILES} ${COMPOSE_CA_FILES}"
 
-  # stop hu containers also in addition to cgn and ib, in case we were running sample to add hu
-  COMPOSE_ORG3_BASE_FILES="-f addOrg3/compose/${COMPOSE_FILE_ORG3_BASE} -f addOrg3/compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_ORG3_BASE}"
-  COMPOSE_ORG3_COUCH_FILES="-f addOrg3/compose/${COMPOSE_FILE_ORG3_COUCH} -f addOrg3/compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_ORG3_COUCH}"
-  COMPOSE_ORG3_CA_FILES="-f addOrg3/compose/${COMPOSE_FILE_ORG3_CA} -f addOrg3/compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_ORG3_CA}"
-  COMPOSE_ORG3_FILES="${COMPOSE_ORG3_BASE_FILES} ${COMPOSE_ORG3_COUCH_FILES} ${COMPOSE_ORG3_CA_FILES}"
-
   if [ "${CONTAINER_CLI}" == "docker" ]; then
-    DOCKER_SOCK=$DOCKER_SOCK ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} ${COMPOSE_ORG3_FILES} down --volumes --remove-orphans
+    DOCKER_SOCK=$DOCKER_SOCK ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} down --volumes --remove-orphans
   elif [ "${CONTAINER_CLI}" == "podman" ]; then
-    ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} ${COMPOSE_ORG3_FILES} down --volumes
+    ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} down --volumes
   else
     fatalln "Container CLI  ${CONTAINER_CLI} not supported"
   fi
@@ -483,7 +477,7 @@ function networkDown() {
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/cgn/msp organizations/fabric-ca/cgn/tls-cert.pem organizations/fabric-ca/cgn/ca-cert.pem organizations/fabric-ca/cgn/IssuerPublicKey organizations/fabric-ca/cgn/IssuerRevocationPublicKey organizations/fabric-ca/cgn/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ib/msp organizations/fabric-ca/ib/tls-cert.pem organizations/fabric-ca/ib/ca-cert.pem organizations/fabric-ca/ib/IssuerPublicKey organizations/fabric-ca/ib/IssuerRevocationPublicKey organizations/fabric-ca/ib/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
-    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf addOrg3/fabric-ca/hu/msp addOrg3/fabric-ca/hu/tls-cert.pem addOrg3/fabric-ca/hu/ca-cert.pem addOrg3/fabric-ca/hu/IssuerPublicKey addOrg3/fabric-ca/hu/IssuerRevocationPublicKey addOrg3/fabric-ca/hu/fabric-ca-server.db'
+    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/hu/msp organizations/fabric-ca/hu/tls-cert.pem organizations/fabric-ca/hu/ca-cert.pem organizations/fabric-ca/hu/IssuerPublicKey organizations/fabric-ca/hu/IssuerRevocationPublicKey organizations/fabric-ca/hu/fabric-ca-server.db'
     # remove channel and script artifacts
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf channel-artifacts log.txt *.tar.gz'
   fi
@@ -498,11 +492,11 @@ COMPOSE_FILE_COUCH=compose-couch.yaml
 # certificate authorities compose file
 COMPOSE_FILE_CA=compose-ca.yaml
 # use this as the default docker-compose yaml definition for hu
-COMPOSE_FILE_ORG3_BASE=compose-hu.yaml
+COMPOSE_FILE_ORG3_BASE=addOrg3/compose/compose-org3.yaml
 # use this as the docker compose couch file for hu
-COMPOSE_FILE_ORG3_COUCH=compose-couch-hu.yaml
+COMPOSE_FILE_ORG3_COUCH=addOrg3/compose/compose-couch-org3.yaml
 # certificate authorities compose file
-COMPOSE_FILE_ORG3_CA=compose-ca-hu.yaml
+COMPOSE_FILE_ORG3_CA=addOrg3/compose/compose-ca-org3.yaml
 #
 
 # Get docker sock path from environment variable

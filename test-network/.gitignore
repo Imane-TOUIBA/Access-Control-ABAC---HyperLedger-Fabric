@@ -14,3 +14,10 @@ organizations/peerOrganizations/*
 system-genesis-block/*
 *.tar.gz
 log.txt
+
+# Fabric generated crypto material
+organizations/**/msp/keystore/*
+organizations/**/fabric-ca-server.db
+addOrg3/fabric-ca/**/msp/keystore/*
+addOrg3/fabric-ca/**/fabric-ca-server.db
+channel-artifacts/*

@@ -174,40 +174,62 @@ function createOrg2() {
 
 function createOrg3() {
 
-  infoln "Enrolling CA admin for HU"
+  infoln "Creating HU Identities"
 
   mkdir -p organizations/peerOrganizations/hu.example.com
 
   export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/hu.example.com
 
+  infoln "Enrolling CA admin for HU"
+
   fabric-ca-client enroll \
-    -u https://huadmin:huadminpw@localhost:10054 \
+    -u https://admin:adminpw@localhost:10054 \
     --caname ca-hu \
-    -M "${PWD}/organizations/peerOrganizations/hu.example.com/msp" \
-    --tls.certfiles "${PWD}/organizations/fabric-ca/hu/ca-cert.pem"
+    -M ${PWD}/organizations/peerOrganizations/hu.example.com/msp \
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
 
 
   echo 'NodeOUs:
 Enable: true
 ClientOUIdentifier:
- Certificate: cacerts/ca.hu.example.com-cert.pem
- OrganizationalUnitIdentifier: client
+Certificate: cacerts/ca.hu.example.com-cert.pem
+OrganizationalUnitIdentifier: client
 PeerOUIdentifier:
- Certificate: cacerts/ca.hu.example.com-cert.pem
- OrganizationalUnitIdentifier: peer
+Certificate: cacerts/ca.hu.example.com-cert.pem
+OrganizationalUnitIdentifier: peer
 AdminOUIdentifier:
- Certificate: cacerts/ca.hu.example.com-cert.pem
- OrganizationalUnitIdentifier: admin
+Certificate: cacerts/ca.hu.example.com-cert.pem
+OrganizationalUnitIdentifier: admin
 OrdererOUIdentifier:
- Certificate: cacerts/ca.hu.example.com-cert.pem
- OrganizationalUnitIdentifier: orderer' \
- > organizations/peerOrganizations/hu.example.com/msp/config.yaml
+Certificate: cacerts/ca.hu.example.com-cert.pem
+OrganizationalUnitIdentifier: orderer' \
+> organizations/peerOrganizations/hu.example.com/msp/config.yaml
 
 
   mkdir -p organizations/peerOrganizations/hu.example.com/msp/tlscacerts
 
   cp organizations/fabric-ca/hu/ca-cert.pem \
   organizations/peerOrganizations/hu.example.com/msp/tlscacerts/ca.crt
+
+
+  infoln "Registering peer0.hu"
+
+  fabric-ca-client register \
+    --caname ca-hu \
+    --id.name peer0 \
+    --id.secret peer0pw \
+    --id.type peer \
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
+
+
+  infoln "Registering HU admin"
+
+  fabric-ca-client register \
+    --caname ca-hu \
+    --id.name huadmin \
+    --id.secret huadminpw \
+    --id.type admin \
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
 
 
   mkdir -p organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com
@@ -217,7 +239,7 @@ OrdererOUIdentifier:
     -u https://peer0:peer0pw@localhost:10054 \
     --caname ca-hu \
     -M organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/msp \
-    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
 
 
   cp organizations/peerOrganizations/hu.example.com/msp/config.yaml \
@@ -230,7 +252,7 @@ OrdererOUIdentifier:
     --enrollment.profile tls \
     --csr.hosts peer0.hu.example.com \
     -M organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls \
-    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
 
 
   cp organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/tlscacerts/* \
@@ -245,11 +267,14 @@ OrdererOUIdentifier:
   organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/server.key
 
 
+  mkdir -p organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp
+
+
   fabric-ca-client enroll \
     -u https://huadmin:huadminpw@localhost:10054 \
     --caname ca-hu \
     -M organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp \
-    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+    --tls.certfiles ${PWD}/organizations/fabric-ca/hu/ca-cert.pem
 
 
   cp organizations/peerOrganizations/hu.example.com/msp/config.yaml \

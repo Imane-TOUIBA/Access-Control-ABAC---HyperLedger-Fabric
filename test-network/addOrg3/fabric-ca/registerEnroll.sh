@@ -6,6 +6,10 @@
 #
 
 function createOrg3 {
+echo "========== DEBUG =========="
+echo "PWD=$PWD"
+ls -l fabric-ca/hu
+echo "==========================="
 	infoln "Enrolling the CA admin"
 	mkdir -p ../organizations/peerOrganizations/hu.example.com/
 
