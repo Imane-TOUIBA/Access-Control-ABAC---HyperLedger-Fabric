@@ -25,7 +25,7 @@ data:
         },
         "organizations": {
             "Org1": {
-                "mspid": "Org1MSP",
+                "mspid": "CGNMSP",
                 "peers": [
                     "org1-peers"
                 ],
@@ -101,7 +101,7 @@ data:
         },
         "organizations": {
             "Org2": {
-                "mspid": "Org2MSP",
+                "mspid": "IBMSP",
                 "peers": [
                     "org2-peers"
                 ],

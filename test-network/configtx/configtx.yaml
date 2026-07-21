@@ -41,49 +41,49 @@ Organizations:
   - &Org1
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
-    Name: Org1MSP
+    Name: CGNMSP
     # ID to load the MSP definition as
-    ID: Org1MSP
-    MSPDir: ../organizations/peerOrganizations/org1.example.com/msp
+    ID: CGNMSP
+    MSPDir: ../organizations/peerOrganizations/cgn.example.com/msp
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
     #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.peer', 'CGNMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org1MSP.admin')"
+        Rule: "OR('CGNMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org1MSP.peer')"
+        Rule: "OR('CGNMSP.peer')"
   - &Org2
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
-    Name: Org2MSP
+    Name: IBMSP
     # ID to load the MSP definition as
-    ID: Org2MSP
-    MSPDir: ../organizations/peerOrganizations/org2.example.com/msp
+    ID: IBMSP
+    MSPDir: ../organizations/peerOrganizations/ib.example.com/msp
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
     #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.peer', 'IBMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org2MSP.admin')"
+        Rule: "OR('IBMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org2MSP.peer')"
+        Rule: "OR('IBMSP.peer')"
 ################################################################################
 #
 #   SECTION: Capabilities

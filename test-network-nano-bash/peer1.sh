@@ -33,7 +33,7 @@ export CORE_PEER_CHAINCODELISTENADDRESS="${CORE_PEER_CHAINCODELISTENADDRESS_HOST
 # bootstrap peer is the other peer in the same org
 export CORE_PEER_GOSSIP_BOOTSTRAP=127.0.0.1:7053
 export CORE_PEER_GOSSIP_EXTERNALENDPOINT=127.0.0.1:7051
-export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_LOCALMSPID=CGNMSP
 export CORE_PEER_MSPCONFIGPATH="${PWD}"/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp
 export CORE_OPERATIONS_LISTENADDRESS=127.0.0.1:8446
 export CORE_PEER_FILESYSTEMPATH="${PWD}"/data/peer0.org1.example.com

@@ -10,12 +10,12 @@ scrape_configs:
   - job_name: "orderer"
     static_configs:
       - targets: ["orderer.example.com:9443"]
-  - job_name: "peer0_org1"
+  - job_name: "peer0_cgn"
     static_configs:
-      - targets: ["peer0.org1.example.com:9444"]
-  - job_name: "peer0_org2"
+      - targets: ["peer0.cgn.example.com:9444"]
+  - job_name: "peer0_ib"
     static_configs:
-      - targets: ["peer0.org2.example.com:9445"]
+      - targets: ["peer0.ib.example.com:9445"]
   - job_name: cadvisor
     scrape_interval: 5s
     static_configs:

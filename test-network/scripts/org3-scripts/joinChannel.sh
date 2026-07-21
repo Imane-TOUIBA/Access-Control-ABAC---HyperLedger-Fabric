@@ -7,7 +7,7 @@
 
 # This script is designed to be run by addOrg3.sh as the
 # second step of the Adding an Org to a Channel tutorial.
-# It joins the org3 peers to the channel previously setup in
+# It joins the hu peers to the channel previously setup in
 # the test network tutorial.
 
 CHANNEL_NAME="$1"
@@ -23,8 +23,8 @@ MAX_RETRY=5
 
 # import environment variables
 # test network home var targets to test-network folder
-# the reason we use a var here is considering with org3 specific folder
-# when invoking this for org3 as test-network/scripts/org3-scripts
+# the reason we use a var here is considering with hu specific folder
+# when invoking this for hu as test-network/scripts/hu-scripts
 # the value is changed from default as $PWD (test-network)
 # to ${PWD}/.. to make the import works
 export TEST_NETWORK_HOME="${PWD}/.."
@@ -66,10 +66,10 @@ res=$?
 cat log.txt
 verifyResult $res "Fetching config block from orderer has failed"
 
-infoln "Joining org3 peer to the channel..."
+infoln "Joining hu peer to the channel..."
 joinChannel 3
 
-infoln "Setting anchor peer for org3..."
+infoln "Setting anchor peer for hu..."
 setAnchorPeer 3
 
 successln "Channel '$CHANNEL_NAME' joined"

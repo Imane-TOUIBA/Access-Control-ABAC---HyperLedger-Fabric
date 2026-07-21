@@ -32,8 +32,8 @@ function printHelp () {
   echo "  addOrg3.sh up|down|generate [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>]"
   echo "  addOrg3.sh -h|--help (print this message)"
   echo "    <mode> - one of 'up', 'down', or 'generate'"
-  echo "      - 'up' - add org3 to the sample network. You need to bring up the test network and create a channel first."
-  echo "      - 'down' - bring down the test network and org3 nodes"
+  echo "      - 'up' - add hu to the sample network. You need to bring up the test network and create a channel first."
+  echo "      - 'down' - bring down the test network and hu nodes"
   echo "      - 'generate' - generate required certificates and org definition"
   echo "    -c <channel name> - test network channel name (defaults to \"mychannel\")"
   echo "    -ca <use CA> -  Use a CA to generate the crypto material"
@@ -57,7 +57,7 @@ function printHelp () {
 
 # We use the cryptogen tool to generate the cryptographic material
 # (x509 certs) for the new org.  After we run the tool, the certs will
-# be put in the organizations folder with org1 and org2
+# be put in the organizations folder with cgn and ib
 
 # Create Organziation crypto material using cryptogen or CAs
 function generateOrg3() {
@@ -72,7 +72,7 @@ function generateOrg3() {
     infoln "Creating Org3 Identities"
 
     set -x
-    cryptogen generate --config=org3-crypto.yaml --output="../organizations"
+    cryptogen generate --config=hu-crypto.yaml --output="../organizations"
     res=$?
     { set +x; } 2>/dev/null
     if [ $res -ne 0 ]; then
@@ -117,7 +117,7 @@ function generateOrg3Definition() {
   infoln "Generating Org3 organization definition"
   export FABRIC_CFG_PATH=$PWD
   set -x
-  configtxgen -printOrg Org3MSP > ../organizations/peerOrganizations/org3.example.com/org3.json
+  configtxgen -printOrg HUMSP > ../organizations/peerOrganizations/hu.example.com/hu.json
   res=$?
   { set +x; } 2>/dev/null
   if [ $res -ne 0 ]; then
@@ -126,10 +126,10 @@ function generateOrg3Definition() {
 }
 
 function Org3Up () {
-  # start org3 nodes
+  # start hu nodes
 
   if [ "$CONTAINER_CLI" == "podman" ]; then
-    cp ../podman/core.yaml ../../organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/
+    cp ../podman/core.yaml ../../organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/
   fi
 
   if [ "${DATABASE}" == "couchdb" ]; then
@@ -150,7 +150,7 @@ function addOrg3 () {
   fi
 
   # generate artifacts if they don't exist
-  if [ ! -d "../organizations/peerOrganizations/org3.example.com" ]; then
+  if [ ! -d "../organizations/peerOrganizations/hu.example.com" ]; then
     generateOrg3
     generateOrg3Definition
   fi
@@ -162,13 +162,13 @@ function addOrg3 () {
   # Org3 to the network
   infoln "Generating and submitting config tx to add Org3"
   export FABRIC_CFG_PATH=${PWD}/../../config
-  . ../scripts/org3-scripts/updateChannelConfig.sh $CHANNEL_NAME $CLI_DELAY $CLI_TIMEOUT $VERBOSE
+  . ../scripts/hu-scripts/updateChannelConfig.sh $CHANNEL_NAME $CLI_DELAY $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     fatalln "ERROR !!!! Unable to create config tx"
   fi
 
   infoln "Joining Org3 peers to network"
-  . ../scripts/org3-scripts/joinChannel.sh $CHANNEL_NAME $CLI_DELAY $CLI_TIMEOUT $VERBOSE
+  . ../scripts/hu-scripts/joinChannel.sh $CHANNEL_NAME $CLI_DELAY $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     fatalln "ERROR !!!! Unable to join Org3 peers to network"
   fi
@@ -190,14 +190,14 @@ CLI_DELAY=3
 # channel name defaults to "mychannel"
 CHANNEL_NAME="mychannel"
 # use this as the docker compose couch file
-COMPOSE_FILE_COUCH_BASE=compose/compose-couch-org3.yaml
-COMPOSE_FILE_COUCH_ORG3=compose/${CONTAINER_CLI}/docker-compose-couch-org3.yaml
+COMPOSE_FILE_COUCH_BASE=compose/compose-couch-hu.yaml
+COMPOSE_FILE_COUCH_ORG3=compose/${CONTAINER_CLI}/docker-compose-couch-hu.yaml
 # use this as the default docker-compose yaml definition
-COMPOSE_FILE_BASE=compose/compose-org3.yaml
-COMPOSE_FILE_ORG3=compose/${CONTAINER_CLI}/docker-compose-org3.yaml
+COMPOSE_FILE_BASE=compose/compose-hu.yaml
+COMPOSE_FILE_ORG3=compose/${CONTAINER_CLI}/docker-compose-hu.yaml
 # certificate authorities compose file
-COMPOSE_FILE_CA_BASE=compose/compose-ca-org3.yaml
-COMPOSE_FILE_CA_ORG3=compose/${CONTAINER_CLI}/docker-compose-ca-org3.yaml
+COMPOSE_FILE_CA_BASE=compose/compose-ca-hu.yaml
+COMPOSE_FILE_CA_ORG3=compose/${CONTAINER_CLI}/docker-compose-ca-hu.yaml
 # database
 DATABASE="leveldb"
 
@@ -259,7 +259,7 @@ done
 
 # Determine whether starting, stopping, restarting or generating for announce
 if [ "$MODE" == "up" ]; then
-  infoln "Adding org3 to channel '${CHANNEL_NAME}' with '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds and using database '${DATABASE}'"
+  infoln "Adding hu to channel '${CHANNEL_NAME}' with '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds and using database '${DATABASE}'"
   echo
 elif [ "$MODE" == "down" ]; then
   EXPMODE="Stopping network"

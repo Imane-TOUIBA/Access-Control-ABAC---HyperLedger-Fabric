@@ -73,10 +73,10 @@ checkPrereqs
 
 PACKAGE_ID=$(peer lifecycle chaincode calculatepackageid ${CC_NAME}.tar.gz)
 
-## Install chaincode on peer0.org1 and peer0.org2
-infoln "Installing chaincode on peer0.org1..."
+## Install chaincode on peer0.cgn and peer0.ib
+infoln "Installing chaincode on peer0.cgn..."
 installChaincode 1
-infoln "Install chaincode on peer0.org2..."
+infoln "Install chaincode on peer0.ib..."
 installChaincode 2
 
 resolveSequence
@@ -84,21 +84,21 @@ resolveSequence
 ## query whether the chaincode is installed
 queryInstalled 1
 
-## approve the definition for org1
+## approve the definition for cgn
 approveForMyOrg 1
 
 ## check whether the chaincode definition is ready to be committed
-## expect org1 to have approved and org2 not to
-checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
-checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
+## expect cgn to have approved and ib not to
+checkCommitReadiness 1 "\"CGNMSP\": true" "\"IBMSP\": false"
+checkCommitReadiness 2 "\"CGNMSP\": true" "\"IBMSP\": false"
 
-## now approve also for org2
+## now approve also for ib
 approveForMyOrg 2
 
 ## check whether the chaincode definition is ready to be committed
 ## expect them both to have approved
-checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
-checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
+checkCommitReadiness 1 "\"CGNMSP\": true" "\"IBMSP\": true"
+checkCommitReadiness 2 "\"CGNMSP\": true" "\"IBMSP\": true"
 
 ## now that we know for sure both orgs have approved, commit the definition
 commitChaincodeDefinition 1 2

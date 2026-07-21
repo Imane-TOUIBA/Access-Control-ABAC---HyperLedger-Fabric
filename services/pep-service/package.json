@@ -1,0 +1,13 @@
+{
+  "name": "pep-service",
+  "version": "1.0.0",
+  "description": "PEP applicatif pour IB. Evalue Prequester localement avant soumission.",
+  "main": "submit_access_request.js",
+  "scripts": {
+    "request": "node submit_access_request.js"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.0",
+    "@hyperledger/fabric-gateway": "^1.11.0"
+  }
+}

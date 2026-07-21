@@ -25,25 +25,25 @@ export CORE_PEER_TLS_ENABLED=true
 # ORG FUNCTIONS (FIXES MSP BUG)
 ########################
 
-setOrg1() {
-export CORE_PEER_LOCALMSPID=Org1MSP
+setCGN() {
+export CORE_PEER_LOCALMSPID=CGNMSP
 export CORE_PEER_ADDRESS=localhost:7051
-export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/cgn.example.com/users/Admin@cgn.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/cgn.example.com/peers/peer0.cgn.example.com/tls/ca.crt
 }
 
-setOrg2() {
-export CORE_PEER_LOCALMSPID=Org2MSP
+setIB() {
+export CORE_PEER_LOCALMSPID=IBMSP
 export CORE_PEER_ADDRESS=localhost:9051
-export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/ib.example.com/users/Admin@ib.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/ib.example.com/peers/peer0.ib.example.com/tls/ca.crt
 }
 
-setOrg3() {
-export CORE_PEER_LOCALMSPID=Org3MSP
+setHU() {
+export CORE_PEER_LOCALMSPID=HUMSP
 export CORE_PEER_ADDRESS=localhost:11051
-export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
-export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=$TESTNET/organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=$TESTNET/organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/ca.crt
 }
 
 ########################
@@ -64,23 +64,23 @@ peer lifecycle chaincode package ${CC_NAME}.tar.gz \
 # INSTALL ALL ORGS
 ########################
 
-echo "Installing on Org1..."
-setOrg1
+echo "Installing on CGN..."
+setCGN
 peer lifecycle chaincode install ${CC_NAME}.tar.gz
 
-echo "Installing on Org2..."
-setOrg2
+echo "Installing on IB..."
+setIB
 peer lifecycle chaincode install ${CC_NAME}.tar.gz
 
-echo "Installing on Org3..."
-setOrg3
+echo "Installing on HU..."
+setHU
 peer lifecycle chaincode install ${CC_NAME}.tar.gz
 
 ########################
 # GET PACKAGE ID (FIXED)
 ########################
 
-setOrg1
+setCGN
 
 PACKAGE_ID=$(peer lifecycle chaincode queryinstalled \
 | grep ${CC_LABEL} \
@@ -122,16 +122,16 @@ peer lifecycle chaincode approveformyorg \
 --cafile $ORDERER_CA
 }
 
-echo "Approve Org1"
-setOrg1
+echo "Approve CGN"
+setCGN
 approve
 
-echo "Approve Org2"
-setOrg2
+echo "Approve IB"
+setIB
 approve
 
-echo "Approve Org3"
-setOrg3
+echo "Approve HU"
+setHU
 approve || true
 
 ########################
@@ -140,7 +140,7 @@ approve || true
 
 echo "Committing chaincode..."
 
-setOrg1
+setCGN
 
 peer lifecycle chaincode commit \
 -o localhost:7050 \
@@ -152,11 +152,11 @@ peer lifecycle chaincode commit \
 --tls \
 --cafile $ORDERER_CA \
 --peerAddresses localhost:7051 \
---tlsRootCertFiles $TESTNET/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt \
+--tlsRootCertFiles $TESTNET/organizations/peerOrganizations/cgn.example.com/peers/peer0.cgn.example.com/tls/ca.crt \
 --peerAddresses localhost:9051 \
---tlsRootCertFiles $TESTNET/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt \
+--tlsRootCertFiles $TESTNET/organizations/peerOrganizations/ib.example.com/peers/peer0.ib.example.com/tls/ca.crt \
 --peerAddresses localhost:11051 \
---tlsRootCertFiles $TESTNET/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+--tlsRootCertFiles $TESTNET/organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/ca.crt
 
 ########################
 # VERIFY

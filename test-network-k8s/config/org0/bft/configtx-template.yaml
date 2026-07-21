@@ -50,10 +50,10 @@ Organizations:
   - &Org1
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
-    Name: Org1MSP
+    Name: CGNMSP
 
     # ID to load the MSP definition as
-    ID: Org1MSP
+    ID: CGNMSP
 
     MSPDir: ./channel-msp/peerOrganizations/org1/msp
 
@@ -63,16 +63,16 @@ Organizations:
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.peer', 'CGNMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org1MSP.admin')"
+        Rule: "OR('CGNMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org1MSP.peer')"
+        Rule: "OR('CGNMSP.peer')"
 
     # leave this flag set to true.
     AnchorPeers:
@@ -85,10 +85,10 @@ Organizations:
   - &Org2
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
-    Name: Org2MSP
+    Name: IBMSP
 
     # ID to load the MSP definition as
-    ID: Org2MSP
+    ID: IBMSP
 
     MSPDir: ./channel-msp/peerOrganizations/org2/msp
 
@@ -98,16 +98,16 @@ Organizations:
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.peer', 'IBMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org2MSP.admin')"
+        Rule: "OR('IBMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org2MSP.peer')"
+        Rule: "OR('IBMSP.peer')"
 
     AnchorPeers:
       # AnchorPeers defines the location of peers which can be used
@@ -201,10 +201,10 @@ Application: &ApplicationDefaults
       Rule: "MAJORITY Admins"
     LifecycleEndorsement:
       Type: Signature
-      Rule: "OR('Org1MSP.peer','Org2MSP.peer')"
+      Rule: "OR('CGNMSP.peer','IBMSP.peer')"
     Endorsement:
       Type: Signature
-      Rule: "OR('Org1MSP.peer','Org2MSP.peer')"
+      Rule: "OR('CGNMSP.peer','IBMSP.peer')"
 
   Capabilities:
     <<: *ApplicationCapabilities

@@ -47,7 +47,7 @@ data:
   # bootstrap peer is the other peer in the same org
   CORE_PEER_GOSSIP_BOOTSTRAP: org2-peer2:7051
   CORE_PEER_GOSSIP_EXTERNALENDPOINT: org2-peer1.${ORG2_NS}.svc.cluster.local:7051
-  CORE_PEER_LOCALMSPID: Org2MSP
+  CORE_PEER_LOCALMSPID: IBMSP
   CORE_PEER_MSPCONFIGPATH: /var/hyperledger/fabric/organizations/peerOrganizations/org2.example.com/peers/org2-peer1.org2.example.com/msp
   CORE_OPERATIONS_LISTENADDRESS: 0.0.0.0:9443
   CORE_PEER_FILESYSTEMPATH: /var/hyperledger/fabric/data/org2-peer1.org2.example.com

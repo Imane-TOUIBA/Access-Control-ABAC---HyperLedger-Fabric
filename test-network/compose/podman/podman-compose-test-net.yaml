@@ -4,11 +4,11 @@
 #
 
 services:
-  peer0.org1.example.com:
+  peer0.cgn.example.com:
     volumes:
       - ./podman/peercfg:/etc/hyperledger/peercfg
 
-  peer0.org2.example.com:
+  peer0.ib.example.com:
     volumes:
       - ./podman/peercfg:/etc/hyperledger/peercfg
 

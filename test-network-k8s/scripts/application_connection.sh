@@ -56,12 +56,12 @@ function construct_application_configmap() {
   local cert=$ENROLLMENT_DIR/org1/users/org1admin/msp/signcerts/cert.pem
   local pk=$ENROLLMENT_DIR/org1/users/org1admin/msp/keystore/key.pem
 
-  echo "$(app_id Org1MSP $cert $pk)" > build/application/wallet/appuser_org1.id
+  echo "$(app_id CGNMSP $cert $pk)" > build/application/wallet/appuser_org1.id
 
   local cert=$ENROLLMENT_DIR/org2/users/org2admin/msp/signcerts/cert.pem
   local pk=$ENROLLMENT_DIR/org2/users/org2admin/msp/keystore/key.pem
 
-  echo "$(app_id Org2MSP $cert $pk)" > build/application/wallet/appuser_org2.id
+  echo "$(app_id IBMSP $cert $pk)" > build/application/wallet/appuser_org2.id
 
   pop_fn
 

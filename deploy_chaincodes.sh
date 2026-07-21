@@ -5,8 +5,8 @@
 # Conforme à la documentation officielle Hyperledger Fabric :
 # "Deploying a smart contract to a channel"
 #
-# Prérequis : réseau actif avec global-channel (Org1+Org2+Org3)
-#             et project-channel (Org1+Org2)
+# Prérequis : réseau actif avec global-channel (CGN+IB+HU)
+#             et project-channel (CGN+IB)
 # =============================================================================
 
 set -e
@@ -20,29 +20,29 @@ export FABRIC_CFG_PATH="$FABRIC_SAMPLES/config"
 export CORE_PEER_TLS_ENABLED=true
 
 # Fonctions de basculement d'organisation
-setOrg1() {
-    export CORE_PEER_LOCALMSPID=Org1MSP
+setCGN() {
+    export CORE_PEER_LOCALMSPID=CGNMSP
     export CORE_PEER_ADDRESS=localhost:7051
-    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp"
-    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/cgn.example.com/users/Admin@cgn.example.com/msp"
+    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/cgn.example.com/peers/peer0.cgn.example.com/tls/ca.crt"
 }
 
-setOrg2() {
-    export CORE_PEER_LOCALMSPID=Org2MSP
+setIB() {
+    export CORE_PEER_LOCALMSPID=IBMSP
     export CORE_PEER_ADDRESS=localhost:9051
-    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp"
-    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/ib.example.com/users/Admin@ib.example.com/msp"
+    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/ib.example.com/peers/peer0.ib.example.com/tls/ca.crt"
 }
 
-setOrg3() {
-    export CORE_PEER_LOCALMSPID=Org3MSP
+setHU() {
+    export CORE_PEER_LOCALMSPID=HUMSP
     export CORE_PEER_ADDRESS=localhost:11051
-    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp"
-    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt"
+    export CORE_PEER_MSPCONFIGPATH="$TEST_NETWORK/organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp"
+    export CORE_PEER_TLS_ROOTCERT_FILE="$TEST_NETWORK/organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/ca.crt"
 }
 
 # =============================================================================
-# PARTIE 1 : ATTESTATIONCONTRACT sur global-channel (Org1 + Org2 + Org3)
+# PARTIE 1 : ATTESTATIONCONTRACT sur global-channel (CGN + IB + HU)
 # =============================================================================
 
 echo ""
@@ -70,23 +70,23 @@ echo "=================================================================="
 echo " ÉTAPE 3 : Installation sur les peers — AttestationContract"
 echo "=================================================================="
 
-echo "Installation sur peer0.org1.example.com..."
-setOrg1
+echo "Installation sur peer0.cgn.example.com..."
+setCGN
 peer lifecycle chaincode install attestationcc.tar.gz
 
-echo "Installation sur peer0.org2.example.com..."
-setOrg2
+echo "Installation sur peer0.ib.example.com..."
+setIB
 peer lifecycle chaincode install attestationcc.tar.gz
 
-echo "Installation sur peer0.org3.example.com..."
-setOrg3
+echo "Installation sur peer0.hu.example.com..."
+setHU
 peer lifecycle chaincode install attestationcc.tar.gz
 
 echo ""
 echo "=================================================================="
 echo " ÉTAPE 4 : Récupération du Package ID — AttestationContract"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode queryinstalled
 echo ""
 echo "ATTENTION : copie le Package ID de attestationcc_1.0 ci-dessus"
@@ -99,9 +99,9 @@ echo "Package ID enregistré : $CC_PACKAGE_ID_ATTEST"
 
 echo ""
 echo "=================================================================="
-echo " ÉTAPE 5 : Approbation — AttestationContract (Org1)"
+echo " ÉTAPE 5 : Approbation — AttestationContract (CGN)"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode approveformyorg \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -112,13 +112,13 @@ peer lifecycle chaincode approveformyorg \
     --sequence 1 \
     --tls \
     --cafile "$ORDERER_CA"
-echo "Org1 a approuvé AttestationContract."
+echo "CGN a approuvé AttestationContract."
 
 echo ""
 echo "=================================================================="
-echo " ÉTAPE 6 : Approbation — AttestationContract (Org2)"
+echo " ÉTAPE 6 : Approbation — AttestationContract (IB)"
 echo "=================================================================="
-setOrg2
+setIB
 peer lifecycle chaincode approveformyorg \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -129,13 +129,13 @@ peer lifecycle chaincode approveformyorg \
     --sequence 1 \
     --tls \
     --cafile "$ORDERER_CA"
-echo "Org2 a approuvé AttestationContract."
+echo "IB a approuvé AttestationContract."
 
 echo ""
 echo "=================================================================="
-echo " ÉTAPE 7 : Approbation — AttestationContract (Org3)"
+echo " ÉTAPE 7 : Approbation — AttestationContract (HU)"
 echo "=================================================================="
-setOrg3
+setHU
 peer lifecycle chaincode approveformyorg \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -146,13 +146,13 @@ peer lifecycle chaincode approveformyorg \
     --sequence 1 \
     --tls \
     --cafile "$ORDERER_CA"
-echo "Org3 a approuvé AttestationContract."
+echo "HU a approuvé AttestationContract."
 
 echo ""
 echo "=================================================================="
 echo " ÉTAPE 8 : Vérification commit readiness — AttestationContract"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode checkcommitreadiness \
     --channelID global-channel \
     --name attestationcc \
@@ -167,7 +167,7 @@ echo ""
 echo "=================================================================="
 echo " ÉTAPE 9 : Commit — AttestationContract sur global-channel"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode commit \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -178,11 +178,11 @@ peer lifecycle chaincode commit \
     --tls \
     --cafile "$ORDERER_CA" \
     --peerAddresses localhost:7051 \
-    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" \
+    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/cgn.example.com/peers/peer0.cgn.example.com/tls/ca.crt" \
     --peerAddresses localhost:9051 \
-    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" \
+    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/ib.example.com/peers/peer0.ib.example.com/tls/ca.crt" \
     --peerAddresses localhost:11051 \
-    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt"
+    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/ca.crt"
 echo "AttestationContract commité sur global-channel."
 
 echo ""
@@ -197,7 +197,7 @@ echo "AttestationContract déployé avec succès sur global-channel."
 echo ""
 
 # =============================================================================
-# PARTIE 2 : POLICYCONTRACT sur project-channel (Org1 + Org2 seulement)
+# PARTIE 2 : POLICYCONTRACT sur project-channel (CGN + IB seulement)
 # =============================================================================
 
 echo ""
@@ -225,19 +225,19 @@ echo "=================================================================="
 echo " ÉTAPE 13 : Installation sur les peers — PolicyContract"
 echo "=================================================================="
 
-echo "Installation sur peer0.org1.example.com..."
-setOrg1
+echo "Installation sur peer0.cgn.example.com..."
+setCGN
 peer lifecycle chaincode install policycc.tar.gz
 
-echo "Installation sur peer0.org2.example.com..."
-setOrg2
+echo "Installation sur peer0.ib.example.com..."
+setIB
 peer lifecycle chaincode install policycc.tar.gz
 
 echo ""
 echo "=================================================================="
 echo " ÉTAPE 14 : Récupération du Package ID — PolicyContract"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode queryinstalled
 echo ""
 echo "ATTENTION : copie le Package ID de policycc_1.0 ci-dessus"
@@ -250,9 +250,9 @@ echo "Package ID enregistré : $CC_PACKAGE_ID_POLICY"
 
 echo ""
 echo "=================================================================="
-echo " ÉTAPE 15 : Approbation — PolicyContract (Org1)"
+echo " ÉTAPE 15 : Approbation — PolicyContract (CGN)"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode approveformyorg \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -263,13 +263,13 @@ peer lifecycle chaincode approveformyorg \
     --sequence 1 \
     --tls \
     --cafile "$ORDERER_CA"
-echo "Org1 a approuvé PolicyContract."
+echo "CGN a approuvé PolicyContract."
 
 echo ""
 echo "=================================================================="
-echo " ÉTAPE 16 : Approbation — PolicyContract (Org2)"
+echo " ÉTAPE 16 : Approbation — PolicyContract (IB)"
 echo "=================================================================="
-setOrg2
+setIB
 peer lifecycle chaincode approveformyorg \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -280,13 +280,13 @@ peer lifecycle chaincode approveformyorg \
     --sequence 1 \
     --tls \
     --cafile "$ORDERER_CA"
-echo "Org2 a approuvé PolicyContract."
+echo "IB a approuvé PolicyContract."
 
 echo ""
 echo "=================================================================="
 echo " ÉTAPE 17 : Vérification commit readiness — PolicyContract"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode checkcommitreadiness \
     --channelID project-channel \
     --name policycc \
@@ -295,13 +295,13 @@ peer lifecycle chaincode checkcommitreadiness \
     --tls \
     --cafile "$ORDERER_CA" \
     --output json
-echo "Org1MSP et Org2MSP doivent afficher true."
+echo "CGNMSP et IBMSP doivent afficher true."
 
 echo ""
 echo "=================================================================="
 echo " ÉTAPE 18 : Commit — PolicyContract sur project-channel"
 echo "=================================================================="
-setOrg1
+setCGN
 peer lifecycle chaincode commit \
     -o localhost:7050 \
     --ordererTLSHostnameOverride orderer.example.com \
@@ -312,9 +312,9 @@ peer lifecycle chaincode commit \
     --tls \
     --cafile "$ORDERER_CA" \
     --peerAddresses localhost:7051 \
-    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" \
+    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/cgn.example.com/peers/peer0.cgn.example.com/tls/ca.crt" \
     --peerAddresses localhost:9051 \
-    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+    --tlsRootCertFiles "$TEST_NETWORK/organizations/peerOrganizations/ib.example.com/peers/peer0.ib.example.com/tls/ca.crt"
 echo "PolicyContract commité sur project-channel."
 
 echo ""
@@ -329,6 +329,6 @@ echo "PolicyContract déployé avec succès sur project-channel."
 echo ""
 echo "=================================================================="
 echo " DÉPLOIEMENT TERMINÉ"
-echo " AttestationContract : global-channel (Org1, Org2, Org3)"
-echo " PolicyContract      : project-channel (Org1, Org2)"
+echo " AttestationContract : global-channel (CGN, IB, HU)"
+echo " PolicyContract      : project-channel (CGN, IB)"
 echo "=================================================================="

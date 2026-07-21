@@ -40,9 +40,9 @@ Organizations:
       - 127.0.0.1:6052
       - 127.0.0.1:6053
   - &Org1
-    Name: Org1MSP
+    Name: CGNMSP
     # ID to load the MSP definition as
-    ID: Org1MSP
+    ID: CGNMSP
     MSPDir: crypto-config/peerOrganizations/org1.example.com/msp
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
@@ -50,16 +50,16 @@ Organizations:
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.peer', 'CGNMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+        Rule: "OR('CGNMSP.admin', 'CGNMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org1MSP.admin')"
+        Rule: "OR('CGNMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org1MSP.peer')"
+        Rule: "OR('CGNMSP.peer')"
     # leave this flag set to true.
     AnchorPeers:
       # AnchorPeers defines the location of peers which can be used
@@ -68,9 +68,9 @@ Organizations:
       - Host: 127.0.0.1
         Port: 7051
   - &Org2
-    Name: Org2MSP
+    Name: IBMSP
     # ID to load the MSP definition as
-    ID: Org2MSP
+    ID: IBMSP
     MSPDir: crypto-config/peerOrganizations/org2.example.com/msp
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
@@ -78,16 +78,16 @@ Organizations:
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.peer', 'IBMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+        Rule: "OR('IBMSP.admin', 'IBMSP.client')"
       Admins:
         Type: Signature
-        Rule: "OR('Org2MSP.admin')"
+        Rule: "OR('IBMSP.admin')"
       Endorsement:
         Type: Signature
-        Rule: "OR('Org2MSP.peer')"
+        Rule: "OR('IBMSP.peer')"
     AnchorPeers:
       # AnchorPeers defines the location of peers which can be used
       # for cross org gossip communication.  Note, this value is only
@@ -172,10 +172,10 @@ Application: &ApplicationDefaults
       Rule: "MAJORITY Admins"
     LifecycleEndorsement:
       Type: Signature
-      Rule: "OR('Org1MSP.peer','Org2MSP.peer')"
+      Rule: "OR('CGNMSP.peer','IBMSP.peer')"
     Endorsement:
       Type: Signature
-      Rule: "OR('Org1MSP.peer','Org2MSP.peer')"
+      Rule: "OR('CGNMSP.peer','IBMSP.peer')"
   Capabilities:
     <<: *ApplicationCapabilities
 ################################################################################

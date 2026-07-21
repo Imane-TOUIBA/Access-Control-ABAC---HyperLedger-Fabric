@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Portail de Consentement - HU</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f4f9; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        input { display: block; width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        button:hover { background: #0056b3; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        .result { margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 4px; white-space: pre-wrap; font-family: monospace; font-size: 0.9em;}
+    </style>
+</head>
+<body>
+    <h1>Portail de Gestion des Consentements (HU)</h1>
+
+    <div class="card">
+        <h2>1. Enregistrer un consentement</h2>
+        <input type="text" id="reg_patient" placeholder="Patient ID (ex: Patient1)" value="Patient1">
+        <input type="text" id="reg_org" placeholder="Org bénéficiaire (ex: CGNMSP)" value="CGNMSP">
+        <input type="text" id="reg_res" placeholder="Resource ID (ex: o2b)" value="o2b">
+        <input type="text" id="reg_proj" placeholder="Project ID (ex: Oncologie)" value="Oncologie">
+        <input type="datetime-local" id="reg_exp" value="2027-12-31T23:59">
+        <button onclick="registerConsent()">Enregistrer sur la Blockchain</button>
+        <div id="reg_result" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>2. Révoquer un consentement</h2>
+        <input type="text" id="rev_patient" placeholder="Patient ID" value="Patient1">
+        <input type="text" id="rev_org" placeholder="Org bénéficiaire" value="CGNMSP">
+        <input type="text" id="rev_res" placeholder="Resource ID" value="o2b">
+        <input type="text" id="rev_proj" placeholder="Project ID" value="Oncologie">
+        <button class="danger" onclick="revokeConsent()">Révoquer</button>
+        <div id="rev_result" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>3. Consulter l'état d'un consentement</h2>
+        <input type="text" id="get_patient" placeholder="Patient ID" value="Patient1">
+        <input type="text" id="get_org" placeholder="Org bénéficiaire" value="CGNMSP">
+        <input type="text" id="get_res" placeholder="Resource ID" value="o2b">
+        <input type="text" id="get_proj" placeholder="Project ID" value="Oncologie">
+        <button onclick="getConsent()">Consulter le Ledger</button>
+        <div id="get_result" class="result"></div>
+    </div>
+
+    <script>
+        async function registerConsent() {
+            const body = {
+                patientId: document.getElementById('reg_patient').value,
+                orgId: document.getElementById('reg_org').value,
+                resourceId: document.getElementById('reg_res').value,
+                projectId: document.getElementById('reg_proj').value,
+                expiresAt: new Date(document.getElementById('reg_exp').value).toISOString()
+            };
+            const res = await fetch('/api/consent', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+            document.getElementById('reg_result').innerText = JSON.stringify(await res.json(), null, 2);
+        }
+
+        async function revokeConsent() {
+            const body = {
+                patientId: document.getElementById('rev_patient').value,
+                orgId: document.getElementById('rev_org').value,
+                resourceId: document.getElementById('rev_res').value,
+                projectId: document.getElementById('rev_proj').value
+            };
+            const res = await fetch('/api/consent', { method: 'DELETE', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+            document.getElementById('rev_result').innerText = JSON.stringify(await res.json(), null, 2);
+        }
+
+        async function getConsent() {
+            const params = new URLSearchParams({
+                patientId: document.getElementById('get_patient').value,
+                orgId: document.getElementById('get_org').value,
+                resourceId: document.getElementById('get_res').value,
+                projectId: document.getElementById('get_proj').value
+            });
+            const res = await fetch(`/api/consent?${params}`);
+            document.getElementById('get_result').innerText = JSON.stringify(await res.json(), null, 2);
+        }
+    </script>
+</body>
+</html>
