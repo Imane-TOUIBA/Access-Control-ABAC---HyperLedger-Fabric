@@ -172,6 +172,91 @@ function createOrg2() {
   cp "${PWD}/organizations/peerOrganizations/ib.example.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/ib.example.com/users/Admin@ib.example.com/msp/config.yaml"
 }
 
+function createOrg3() {
+
+  infoln "Enrolling CA admin for HU"
+
+  mkdir -p organizations/peerOrganizations/hu.example.com
+
+  export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/hu.example.com
+
+  fabric-ca-client enroll \
+    -u https://huadmin:huadminpw@localhost:10054 \
+    --caname ca-hu \
+    -M "${PWD}/organizations/peerOrganizations/hu.example.com/msp" \
+    --tls.certfiles "${PWD}/organizations/fabric-ca/hu/ca-cert.pem"
+
+
+  echo 'NodeOUs:
+Enable: true
+ClientOUIdentifier:
+ Certificate: cacerts/ca.hu.example.com-cert.pem
+ OrganizationalUnitIdentifier: client
+PeerOUIdentifier:
+ Certificate: cacerts/ca.hu.example.com-cert.pem
+ OrganizationalUnitIdentifier: peer
+AdminOUIdentifier:
+ Certificate: cacerts/ca.hu.example.com-cert.pem
+ OrganizationalUnitIdentifier: admin
+OrdererOUIdentifier:
+ Certificate: cacerts/ca.hu.example.com-cert.pem
+ OrganizationalUnitIdentifier: orderer' \
+ > organizations/peerOrganizations/hu.example.com/msp/config.yaml
+
+
+  mkdir -p organizations/peerOrganizations/hu.example.com/msp/tlscacerts
+
+  cp organizations/fabric-ca/hu/ca-cert.pem \
+  organizations/peerOrganizations/hu.example.com/msp/tlscacerts/ca.crt
+
+
+  mkdir -p organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com
+
+
+  fabric-ca-client enroll \
+    -u https://peer0:peer0pw@localhost:10054 \
+    --caname ca-hu \
+    -M organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/msp \
+    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+
+
+  cp organizations/peerOrganizations/hu.example.com/msp/config.yaml \
+  organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/msp/config.yaml
+
+
+  fabric-ca-client enroll \
+    -u https://peer0:peer0pw@localhost:10054 \
+    --caname ca-hu \
+    --enrollment.profile tls \
+    --csr.hosts peer0.hu.example.com \
+    -M organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls \
+    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+
+
+  cp organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/tlscacerts/* \
+  organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/ca.crt
+
+
+  cp organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/signcerts/* \
+  organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/server.crt
+
+
+  cp organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/keystore/* \
+  organizations/peerOrganizations/hu.example.com/peers/peer0.hu.example.com/tls/server.key
+
+
+  fabric-ca-client enroll \
+    -u https://huadmin:huadminpw@localhost:10054 \
+    --caname ca-hu \
+    -M organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp \
+    --tls.certfiles organizations/fabric-ca/hu/ca-cert.pem
+
+
+  cp organizations/peerOrganizations/hu.example.com/msp/config.yaml \
+  organizations/peerOrganizations/hu.example.com/users/Admin@hu.example.com/msp/config.yaml
+
+}
+
 function createOrderer() {
   infoln "Enrolling the CA admin"
   mkdir -p organizations/ordererOrganizations/example.com
@@ -252,3 +337,8 @@ function createOrderer() {
 
   cp "${PWD}/organizations/ordererOrganizations/example.com/msp/config.yaml" "${PWD}/organizations/ordererOrganizations/example.com/users/Admin@example.com/msp/config.yaml"
 }
+
+createOrg1
+createOrg2
+createOrg3
+createOrderer

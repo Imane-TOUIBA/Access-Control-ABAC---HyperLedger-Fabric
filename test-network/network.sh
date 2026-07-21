@@ -187,6 +187,16 @@ function createOrgs() {
       fatalln "Failed to generate certificates..."
     fi
 
+    infoln "Creating HU Identities"
+
+    set -x
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-hu.yaml --output="organizations"
+    res=$?
+    { set +x; } 2>/dev/null
+    if [ $res -ne 0 ]; then
+      fatalln "Failed to generate certificates..."
+    fi
+
     infoln "Creating Orderer Org Identities"
 
     set -x
@@ -250,13 +260,17 @@ function createOrgs() {
     COUNTER=$((COUNTER + 1))
     done
 
-    infoln "Creating Org1 Identities"
+    infoln "Creating cgn Identities"
 
     createOrg1
 
-    infoln "Creating Org2 Identities"
+    infoln "Creating ib Identities"
 
     createOrg2
+
+    infoln "Creating hu Identities"
+
+    createOrg3
 
     infoln "Creating Orderer Org Identities"
 

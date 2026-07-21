@@ -84,6 +84,27 @@ Organizations:
       Endorsement:
         Type: Signature
         Rule: "OR('IBMSP.peer')"
+  - &Org3
+    Name: HUMSP
+    ID: HUMSP
+    MSPDir: ../organizations/peerOrganizations/hu.example.com/msp
+
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('HUMSP.admin', 'HUMSP.peer', 'HUMSP.client')"
+
+      Writers:
+        Type: Signature
+        Rule: "OR('HUMSP.admin', 'HUMSP.client')"
+
+      Admins:
+        Type: Signature
+        Rule: "OR('HUMSP.admin')"
+
+      Endorsement:
+        Type: Signature
+        Rule: "OR('HUMSP.peer')"
 ################################################################################
 #
 #   SECTION: Capabilities
@@ -276,4 +297,5 @@ Profiles:
       Organizations:
         - *Org1
         - *Org2
+        - *Org3
       Capabilities: *ApplicationCapabilities

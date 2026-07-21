@@ -80,7 +80,7 @@ tls:
 #############################################################################
 ca:
   # Name of this CA
-  name: Org3CA
+  name: huCA
   # Key file (is only used to import a private key into BCCSP)
   keyfile:
   # Certificate file (default: ca-cert.pem)

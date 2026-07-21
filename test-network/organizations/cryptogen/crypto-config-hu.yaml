@@ -1,0 +1,10 @@
+OrdererOrgs:
+
+PeerOrgs:
+  - Name: HU
+    Domain: hu.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
