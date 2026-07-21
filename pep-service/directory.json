@@ -1,0 +1,6 @@
+{
+  "DrSmith": { "active": true, "role": "researcher", "clearance": "standard", "projects": ["Oncologie"] },
+  "DrEinstein": { "active": true, "role": "senior_researcher", "clearance": "elevee", "projects": ["Oncologie", "Cardio"] },
+  "DrInactive": { "active": false, "role": "researcher", "clearance": "standard", "projects": ["Oncologie"] },
+  "DrUnauthorized": { "active": true, "role": "researcher", "clearance": "standard", "projects": ["Cardio"] }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "relay-service",
+  "version": "1.0.0",
+  "description": "Service relais qui transmet les attestations validees sur global-channel vers PolicyContract sur project-channel, car Hyperledger Fabric ne permet pas un appel direct en ecriture entre deux canaux differents.",
+  "main": "relay.js",
+  "scripts": {
+    "start": "node relay.js"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.0",
+    "@hyperledger/fabric-gateway": "^1.11.0"
+  }
+}
