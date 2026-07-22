@@ -31,3 +31,15 @@ install-fabric.sh
 
 # override the ignore of all config/ folders
 !full-stack-asset-transfer-guide/infrastructure/sample-network/config
+
+# Fabric generated artifacts
+test-network/organizations/peerOrganizations/
+test-network/organizations/ordererOrganizations/
+test-network/organizations/fabric-ca/*/msp/
+test-network/organizations/fabric-ca/*/*.pem
+test-network/organizations/fabric-ca/*/*.db
+test-network/organizations/fabric-ca/*/IssuerPublicKey
+test-network/organizations/fabric-ca/*/IssuerRevocationPublicKey
+test-network/system-genesis-block/
+test-network/channel-artifacts/
+*.tar.gz

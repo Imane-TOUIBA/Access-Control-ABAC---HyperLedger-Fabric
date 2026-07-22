@@ -1,0 +1,38 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+################################################################################
+#
+#   Section: Organizations
+#
+#   - This section defines the different organizational identities which will
+#   be referenced later in the configuration.
+#
+################################################################################
+Organizations:
+    - &Org3
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: HUMSP
+
+        # ID to load the MSP definition as
+        ID: HUMSP
+
+        MSPDir: ../organizations/peerOrganizations/hu.example.com/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('HUMSP.admin', 'HUMSP.peer', 'HUMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('HUMSP.admin', 'HUMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('HUMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('HUMSP.peer')"
